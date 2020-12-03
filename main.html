@@ -1,0 +1,663 @@
+<html>
+<head>
+  <title>FedEx VehicleTelemetry</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="http://maps.google.com/maps/api/js?key=AIzaSyAczxyCAq_e-V-yziFyLIPqBsq14jMU2qU" 
+          type="text/javascript"></script>
+</head>
+<style>
+#title{
+    height: 9.5%;
+    width: auto;
+    border: 1px solid;
+}
+#webbody{
+    height: 89.5%;
+    width: auto;
+	visibility:hidden;
+}
+#list{
+    height: 100%;
+    width: 18%;
+    border: 1px solid;
+    float: left;
+	overflow: scroll;
+	    padding: 2%;
+}
+#drawspace{
+    float: right;
+    height: 100%;
+    width: 81%;
+	padding: 10px;
+}
+#vehicle{
+	float: left;
+    height: 100%;
+    width: 50%;
+}
+#vhinfo{
+    height: 50%;
+    border: 1px solid;
+    width: 100%;
+	border-radius:10px;
+}
+#vhhistory{
+    height: 50%;
+    border: 1px solid;
+    width: 100%;
+	border-radius:10px;
+}
+#route{
+    float: right;
+    height: 100%;
+    width: 49.5%;
+}
+#map{
+    height: 80%;
+    border: 1px solid;
+    width: 100%;
+	border-radius: 10px;
+}
+#summary{
+    height: 20%;
+    border: 1px solid;
+    width: 100%;
+	border-radius: 10px;
+}
+table {
+
+	width: 100%;
+}
+th{
+	border-up: 1px solid #ddd;
+    padding: 3px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+td {
+    border-up: 1px solid #ddd;
+    padding: 3px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+	
+}
+
+tr:hover {background-color:#f5f5f5;}
+
+#cards{
+    height: 50%;
+    width: 100%;
+}
+
+#card1{
+    float: left;
+    height: 100%;
+    width: 50%;
+    padding-right: 5%;
+    padding-left: 5%;
+}
+
+#card2{
+    float: right;
+    height: 100%;
+    width: 50%;
+    padding-right: 5%;
+    padding-left: 5%;
+}
+#chart{
+    height: 40%;
+    width: 100%;
+    border: 1px solid;
+	border-radius: 2px;
+	border-color: #d7d7d7;
+}
+
+</style>
+<body style="overflow:hidden;">
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Miles', 'Vehicles', 'Courier'],
+          ['2014', 1000, 400, 200],
+          ['2015', 1170, 460, 250],
+          ['2016', 660, 1120, 300],
+        ]);
+
+        var options = {
+          chart: {
+            //title: 'Company Performance',
+            //subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+          },
+		  colors:['#1b9e77','#d95702','#7570b3']
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('chart'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      }
+    </script>
+
+<div id="main">
+	<div id="title" style="    min-width: 1400px;">
+		<nav class="navbar navbar-inverse" style="height:99%; background-color: #472F91; border-color: #472F91;">
+		  <div class="container-fluid" style="padding-top:5px;">
+			<div class="navbar-header" style="padding-left:15%">
+			  <div class="navbar-brand" style=" min-width: 160px;   background-image: url(logo.png);"></div>
+			</div>
+			<ul class="nav navbar-nav" style="padding-left:10%">
+			  <li ><a id="dashboard" href="#" style="font-size: 20px;    font-weight: bold;">Dashboard</a></li>
+			  <li><a id="vt" href="#"  style="font-size: 20px;    font-weight: bold;">VehicleTelemetry</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right" style="padding-right:15%">
+			  <li><a href="#"  style="font-size: 15px;    font-weight: bold;"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+			  <li><a href="#" style="font-size: 15px;    font-weight: bold;"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+			</ul>
+		  </div>
+		</nav>
+	</div>
+	<div>
+	<div id="Dashboardmain" style="    min-width: 1400px;">
+	<div id="cards">
+		<div style="height: 100%;width: 100%;padding: 3%;">
+				<div id="card1">
+					<div style="height: 100%;width: 100%;border: 0px solid;/* box-shadow: 10px 20px grey; */border-radius: 20px;">
+					<div style="background-color: #472F91;border-radius: 10px;border: 1px solid;border-color: #d7d7d7;color: white;height: 18%;text-align: center;padding: 10px;"><center><label style="font-size: 25px;font-weight:bold;">Route Tracking</label></center>
+						<!--<select>
+						  <option value="volvo">Volvo</option>
+						  <option value="saab">Saab</option>
+						  <option value="mercedes">Mercedes</option>
+						  <option value="audi">Audi</option>
+						</select>-->
+					</div>
+						<div style="background-color: #e6e7ec;border-radius:20px;border-color: #d7d7d7;">
+							<div style="height: 42%;    width: 100%;">
+								<div style="height: 80%;width: 40%;border: 1px solid;border-color: #d7d7d7;border-radius: 200px;margin: 15px;float: left;text-align: center;padding: 31px;font-size: 22px;background: #d7d7d7;font-weight: bold;"> 4 Hours</div>
+								<div style="height: 80%;width: 40%;border-radius: 200px;margin: 15px;float: right;text-align: center;padding: 31px;font-size: 25px;background: #d7d7d7;border: 1px solid;font-weight: bold;border-color: #d7d7d7;">65 Vehicles</div>
+							</div>
+							<div style="height: 43%;    width: 100%;">
+								<div style="height: 80%;width: 40%;border-radius: 200px;margin: 15px;float: left;text-align: center;padding: 31px;font-size: 25px;background: #d7d7d7;border: 1px solid;border-color: #d7d7d7;font-weight: bold;">500 Couriers</div>
+								<div style="height: 80%;width: 40%;border-radius: 200px;margin: 15px;float: right;text-align: center;padding: 31px;font-size: 25px;background: #d7d7d7;border: 1px solid;border-color: #d7d7d7;font-weight: bold;">600 miles</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="card2">
+					<div style="height: 100%;width: 100%;border: 0px solid;border-radius: 20px;/* box-shadow: 10px 17px grey; */">
+					<div style="background-color: #472F91;border-radius: 5px;border: 1px solid;border-color: #d7d7d7;color: white;height: 18%;text-align: center;padding: 10px;"> <center> <label style="font-size: 25px;font-weight:bold;">Vehicle Maintenance</label></center> 
+						<!--<select>
+						  <option value="volvo">Volvo</option>
+						  <option value="saab">Saab</option>
+						  <option value="mercedes">Mercedes</option>
+						  <option value="audi">Audi</option>
+						</select>-->
+					</div>
+					<div id="content" style="    height: 84%;    width: 100%;">
+						<div style="height: 25%;width: 100%;padding: 20px;border: 0.5px solid;border-color: #d7d7d7;background: white;text-align: center;border-radius: 10px;">
+							<div>
+								<label style="    font-size: 20px;font-weight:bold;">Total Vehicles in use: </label> 
+								<label style="    font-size: 20px;font-weight:bold;">50</label>
+							</div>
+						</div>
+						<div style="height: 25%;width: 100%;padding: 20px;border: 0.25px solid;border-radius: 10px;text-align: center;background: #d7d7d7;">
+							<div>
+								<label style="    font-size: 20px;font-weight:bold;">Newly added Vehicles :</label> 
+								<label style="    font-size: 20px;font-weight:bold;">15</label>
+							</div>
+						</div>
+						<div style="height: 25%;width: 100%;padding: 20px;border: 0.5px solid;border-color: #d7d7d7;border-radius: 10px;text-align: center;background: white;">
+							<div>
+								<label style="    font-size: 20px;font-weight:bold;">Total Crashed:</label> 
+								<label style="    font-size: 20px;font-weight:bold;">5</label>
+							</div>
+						</div>
+						<div style="height: 25%;width: 100%;padding: 20px;border: 0.25px solid;border-radius: 10px;text-align: center;background: #d7d7d7;">
+							<div>
+								<label style="    font-size: 20px;font-weight:bold;">Required Maintenance:</label> 
+								<label style="    font-size: 20px;font-weight:bold;">2</label>
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+		</div>
+	</div>
+	<div style="padding-left: 6%;padding-right: 6%;">
+	<div>
+		<div></div>
+		<div id="chart" >
+		
+		
+		</div>
+	</div>
+	</div>
+	</div>
+	<div id="webbody" style="    min-width: 1400px;">
+		<div id="list"></div>
+		<div id="drawspace">
+			<div id="vehicle">
+				<div id="vhinfo">
+				<!--
+					<div>
+						<div style="float:left;">
+							<img src="car.jpg" height="225px" width="225px" style="border-radius: 25px;"/>
+						</div>
+						<div style="padding-top:20px;">
+							<label style="padding:10px;    font-size: 15px;">Name:                </label> <label id="carName" style="padding:10px;    font-size: 15px;"></label><br></br>
+							<label style="padding:5px;    font-size: 15px;">Model:                </label> <label id="carModel" style="padding:5px;    font-size: 15px;"></label><br></br>
+							<label style="padding:5px;    font-size: 15px;">Number:                </label> <label id="carNumber" style="padding:5px;    font-size: 15px;"></label><br></br>
+						</div>
+					</div>
+					<div style="margin-top:50px;">
+						<label style="padding:5px;    font-size: 15px;">Date of Join:                </label> <label id="dateOfJoin" style="padding:5px;    font-size: 15px;"></label><br></br>
+						<label style="padding:5px;    font-size: 15px;">Condition:                </label> <label id="carCondition" style="padding:5px;    font-size: 15px;"></label><br></br>		
+					</div>
+					-->
+					<div style="    text-align: center;    background: aliceblue;    border-radius: 10px;">
+						<label style="padding:10px;font-size: 25px;"> Vehicle Specification    </label><br>
+					</div>
+					<div>
+					<div style="float:left;">
+							<img src="car.jpg" height="250px" width="225px" />
+						</div>
+					<div style="margin-top: 10px;">
+							<div style="    height: 9%;    padding-top: 5px;    background: #d7d7d7;"><label style="padding:10px;    font-size: 15px;">Name:                </label> <label id="carName" style="padding:10px;    font-size: 15px;"></label></div>
+							<div style="    height: 9%;    padding-top: 5px;    background: white;"><label style="padding:5px;    font-size: 15px;">Make:                </label> <label id="carMake" style="padding:5px;    font-size: 15px;"></label></div>
+							<div style="    height: 9%;     padding-top: 5px;    background: #d7d7d7;"><label style="padding:5px;    font-size: 15px;">Model:                </label> <label id="carModel" style="padding:5px;    font-size: 15px;"></label></div>
+							<div style="    height: 9%;   padding-top: 5px;    background:  white;"><label style="padding:5px;    font-size: 15px;">Registeration number:                </label> <label id="carNumber" style="padding:5px;    font-size: 15px;"></label></div>
+							<div style="    height: 9%;    padding-top: 5px;    background: #d7d7d7;"><label style="padding:10px;    font-size: 15px;">Date of Join:                </label> <label id="date_of_join" style="padding:10px;    font-size: 15px;"></label></div>
+							<div style="    height: 9%;    padding-top: 5px;    background: white;"><label style="padding:5px;    font-size: 15px;">Status:                </label> <label id="status" style="padding:5px;    font-size: 15px;"></label></div>
+							<div style="    height: 9%;    padding-top: 5px;    background: #d7d7d7;"><label style="padding:5px;    font-size: 15px;">FedEx Technology:                </label> <label id="fedex_technology" style="padding:5px;    font-size: 15px;"></label></div>
+					</div>
+					</div>
+				</div>
+				<div id="vhhistory">	
+					<div style="    text-align: center;    background: aliceblue;    border-radius: 10px;">
+						<label style="padding:10px;font-size: 25px;"> Vehicle History    </label><br>
+					</div>
+					<div style="margin-top: 50px;">
+							<div style="    height: 15%;    padding-top: 10px;    background: white;"><label style="padding:10px;    font-size: 15px;">Miles Traveled:                </label> <label id="milesTraveled" style="padding:10px;    font-size: 15px;"></label></div>
+							<div style="    height: 15%;    padding-top: 10px;    background: #d7d7d7;"><label style="padding:5px;    font-size: 15px;">Average Engine Time:                </label> <label id="avg_eng_time" style="padding:5px;    font-size: 15px;"></label></div>
+							<div style="    height: 15%;     padding-top: 10px;    background: white;"><label style="padding:5px;    font-size: 15px;">Maintenance Time:                </label> <label id="maintenance_time" style="padding:5px;    font-size: 15px;"></label></div>
+							<div style="    height: 15%;   padding-top: 10px;    background:  #d7d7d7;"><label style="padding:5px;    font-size: 15px;">Maintenance Message:                </label> <label id="maintenance_msg" style="padding:5px;    font-size: 15px;"></label></div>
+						</div>
+				</div>
+			</div>
+			<div id="route">
+				<div id="map"></div>
+				<div id="summary">
+						<table>
+							<tr>
+							<th>SUMMARY TABLE</th>
+						  </tr>
+						  <tr>
+							<td>Average Stop Time (Hours)</td>
+							<td>4:30:00</td>
+						  </tr>
+						  <tr>
+							<td>Total Stop Time (Hours)</td>
+							<td>12:00:00</td>
+						  </tr>
+							<tr>
+							<td>Total Distance Travelled (Miles)</td>
+							<td>72</td>
+						  </tr>
+						  <tr>
+							<td>Total Engine Idle Time (Hours)</td>
+							<td>5</td>
+						  </tr>
+
+						</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+   
+var geocoder;
+var map;
+var directionsDisplay;
+var directionsService = new google.maps.DirectionsService();
+
+
+ var locations = [
+      ['Amory',            33.984277, -88.488099,'3:30 Am','3:45 Am','0:45:00'],
+      ['Claiborne County', 31.946269, -90.984382,123456,'Am-1345','4:30 Am','4:45 Am','0:15:00','50.3 mi'],
+	  ['Meridian',         32.364311, -88.703659,223456,'Am-2345','5:30 Pm','6:00 Pm','0:30:00','60.1 mi'],
+	  ['Hattiesburg',      31.327120,-89.290337,323456,'Am-3345','5:30 Pm','40.8 mi']  
+    ];
+	
+	
+function initialize() {
+  directionsDisplay = new google.maps.DirectionsRenderer();
+
+
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 10,
+    //center: new google.maps.LatLng(-33.92, 151.25),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  });
+  directionsDisplay.setMap(map);
+  var infowindow = new google.maps.InfoWindow();
+
+  var marker, i;
+  var request = {
+    travelMode: google.maps.TravelMode.DRIVING
+  };
+  for (i = 0; i < locations.length; i++) {
+    marker = new google.maps.Marker({
+      position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+    });
+
+    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+      return function() {
+	  
+        infowindow.setContent("<p>" + 
+		"Courier Id     : "+locations[i][3] + "<br />" + 
+        "Courier Name   : "+locations[i][4] + "<br />" + 
+        "Stn Arvl Time  : "+locations[i][5] + "<br />" + 
+		"Stn Dept Time  : "+locations[i][6] + "<br />" +
+        "Time Elapsed   : "+locations[i][7] + "<br />" + 
+        "Last stop Dist : "+locations[i][8] + "<br />" + 		
+		"</p>");
+        
+		infowindow.open(map, marker);
+      }
+    })(marker, i));
+
+    if (i == 0) request.origin = marker.getPosition();
+    else if (i == locations.length - 1) request.destination = marker.getPosition();
+    else {
+      if (!request.waypoints) request.waypoints = [];
+      request.waypoints.push({
+        location: marker.getPosition(),
+        stopover: true
+      });
+    }
+
+  }
+  directionsService.route(request, function(result, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(result);
+	  directionsDisplay.setOptions({
+                        draggable: false,
+                        suppressInfoWindows: true,
+                        suppressMarkers: true})
+						
+						
+    
+
+    }
+  });
+    for (i = 0; i < locations.length; i++) {
+	
+	    if(i!=0 && i!=locations.length-1 )
+{marker = new google.maps.Marker({
+      position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+	  label: "St"+(i),
+	  map:map,
+	  title:locations[i][0]
+    });
+
+    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+      return function() {
+	  
+infowindow.setContent("<p>" + 
+		"Courier Id     : "+locations[i][3] + "<br />" + 
+        "Courier Name   : "+locations[i][4] + "<br />" + 
+        "Stn Dept Time  : "+locations[i][5] + "<br />" +
+        "Stn Arvl Time  : "+locations[i][6] + "<br />" +		
+        "Time Elapsed   : "+locations[i][7] + "<br />" + 
+        "Last stop Dist : "+locations[i][8] + "<br />" + 		
+		"</p>");
+		
+        infowindow.open(map, marker);
+      }
+    })(marker, i));
+	}
+	
+	
+	if(i==0)
+	{marker = new google.maps.Marker({
+      position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+	  label: 'Src',
+	  map:map,
+	  title:locations[i][0]
+    });
+    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+      return function() {
+        infowindow.setContent("<p>" + 
+		"Stn Arvl Time  : "+locations[i][3] + "<br />" + 
+		"Stn Dept Time  : "+locations[i][4] + "<br />" +
+        "Time Elapsed   : "+locations[i][5] + "<br />" + 
+                
+		"</p>");
+        infowindow.open(map, marker);
+      }
+    })(marker, i));}
+	
+	
+	if(i==locations.length-1)
+	{marker = new google.maps.Marker({
+      position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+	  label: 'Dst',
+	  map:map,
+	  title:locations[i][0]
+    });
+
+    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+      return function() {
+        infowindow.setContent("<p>" + 
+		"Courier Id     : "+locations[i][3] + "<br />" + 
+        "Courier Name   : "+locations[i][4] + "<br />" + 
+        "Stn Arvl Time  : "+locations[i][5] + "<br />" +		
+        "Last stop Dist : "+locations[i][6] + "<br />" +                   
+		"</p>");
+        infowindow.open(map, marker);
+      }
+    })(marker, i));}
+    
+	
+    
+}
+  
+}
+google.maps.event.addDomListener(window, "load", initialize);
+</script>
+
+<script type="text/javascript">
+		var cars_object = {
+			  "car1": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM123"
+			  },
+			  "car2": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM456"
+			  },
+			  "car3": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM789"
+			  },
+			  "car4": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM126445"
+			  },
+			  "car5": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM1223"
+			  },
+			  "car6": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM45644"
+			  },
+			  "car7": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM78933"
+			  },
+			  "car8": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM12622"
+			  },
+			  "car9": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM123"
+			  },
+			  "car10": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM456"
+			  },
+			  "car11": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM789"
+			  },
+			  "car12": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM126445"
+			  },
+			  "car13": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM1223"
+			  },
+			  "car14": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM45644"
+			  },
+			  "car15": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM78933"
+			  },
+			  "car16": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM12622"
+			  },
+			  "car17": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM123"
+			  },
+			  "car18": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM456"
+			  },
+			  "car19": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM789"
+			  },
+			  "car20": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM126445"
+			  },
+			  "car21": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM1223"
+			  },
+			  "car22": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM45644"
+			  },
+			  "car23": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM78933"
+			  },
+			  "car24": {
+				"name":"Ford",
+				"model":"BMW",
+				"number":"FWM12622"
+			  }
+			 }
+			  
+		var index = [];
+
+		// build the index
+		for (var x in cars_object) {
+		   index.push(x);
+		}
+		var x = document.getElementById('list');
+		
+		var numberPlates = []
+		var count = 0;
+		for (var y in cars_object){
+			
+			numberPlates.push(cars_object[index[count]].number);
+			count++;
+		}
+		count = 0;
+		numberPlates.forEach(function(numberPlates){
+			var div = document.createElement('div');
+			div.id = numberPlates;
+			div.style.height = "50px";
+			div.style.backgroundColor = "aliceblue";
+			div.style.border = "1px solid";
+			div.style.borderRadius = "9px";
+			div.style.padding = "15px";
+			div.style.marginBottom = "5px";
+			div.style.marginTop = "5px";
+			div.style.textAlign = "center";
+			div.style.fontSize = "19px";
+			div.style.fontWeight = "bold";
+			div.name = cars_object[index[count]].name;
+			div.model = cars_object[index[count]].model;
+			div.number =  cars_object[index[count]].number;
+			x.appendChild(div);
+			div.innerHTML += numberPlates;
+			div.style.cursor = 'pointer';
+			div.onclick = function() {
+				var carName = document.getElementById("carName");
+				var carModel = document.getElementById("carModel");
+				var carNumber = document.getElementById("carNumber");
+				carName.innerHTML = div.name;
+				carModel.innerHTML = div.model;
+				carNumber.innerHTML = div.number;
+			};
+			count++;
+		});
+		
+		var y = document.getElementById("vt");
+		y.onclick = function() {
+			document.getElementById("webbody").style.visibility = "visible";
+			document.getElementById("Dashboardmain").style.display = "none";
+		};
+		
+		var y = document.getElementById("dashboard");
+		y.onclick = function() {
+		if(document.getElementById("webbody").style.visibility != "hidden"){
+			document.getElementById("webbody").style.visibility = "hidden";
+			document.getElementById("Dashboardmain").style.display = "inline";
+		}
+		};
+		
+		</script>
+</html>
